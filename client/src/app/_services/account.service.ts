@@ -1,7 +1,6 @@
 import { User } from './../_models/user';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from 'aws-sdk/clients/budgets';
 import { BehaviorSubject, map } from 'rxjs';
 
 @Injectable({
@@ -22,6 +21,18 @@ export class AccountService {
           localStorage.setItem('user', JSON.stringify(user));
           this.currentUserSource.next(user);
         }
+      })
+    );
+  }
+
+  register(model: any) {
+    return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
+      map((user) => {
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user));
+          this.currentUserSource.next(user);
+        }
+        return user;
       })
     );
   }
